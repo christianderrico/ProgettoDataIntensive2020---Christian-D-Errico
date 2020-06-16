@@ -13300,11 +13300,14 @@ amaas@cs.stanford.edu</p>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Esportazione-dei-dati">Esportazione dei dati<a class="anchor-link" href="#Esportazione-dei-dati">&#182;</a></h1><p>I dati vengono prima elaborati e caricati in un DataFrame Pandas:</p>
-<ul>
-<li>il contenuto di ogni file .txt è il testo della recensione</li>
-<li>il nome di ogni file è composto dalle seguenti parti: "<code>id del film in questione</code>_<code>punteggio attribuito dall'utente</code>"</li>
-</ul>
+<h1 id="Lettura-recensioni">Lettura recensioni<a class="anchor-link" href="#Lettura-recensioni">&#182;</a></h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>I dati sono letti dal file <code>film_reviews.csv</code></p>
 
 </div>
 </div>
@@ -13314,10 +13317,7 @@ amaas@cs.stanford.edu</p>
 <div class="prompt input_prompt">In&nbsp;[8]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">files</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1">#lista che contiene i vari file .txt con il loro percorso </span>
-<span class="k">for</span> <span class="n">dirpath</span><span class="p">,</span> <span class="n">dirnames</span><span class="p">,</span> <span class="n">filenames</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="s2">&quot;C:</span><span class="se">\\</span><span class="s2">Users</span><span class="se">\\</span><span class="s2">Famiglia D</span><span class="se">\&#39;</span><span class="s2">Errico</span><span class="se">\\</span><span class="s2">Desktop</span><span class="se">\\</span><span class="s2">Tesi2020</span><span class="se">\\</span><span class="s2">files</span><span class="se">\\</span><span class="s2">regioni</span><span class="se">\\</span><span class="s2">aclImdb - Copia&quot;</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">:</span>
-        <span class="n">files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dirpath</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">file</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">film_reviews_full</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;https://raw.githubusercontent.com/christianderrico/ProgettoDataIntensive2020---Christian-D-Errico/master/ProgettoDataIntensive/film_reviews.csv&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="s1">&#39;Unnamed: 0&#39;</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -13328,60 +13328,7 @@ amaas@cs.stanford.edu</p>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Per ogni file è stato letto il contenuto e dal nome sono stati prelevati i campi relativi ad id e valutazione:</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[9]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">reviews</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">reviews</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">())[</span><span class="mi">0</span><span class="p">])</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">film_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;film_id&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span><span class="p">]),</span> 
-        <span class="s2">&quot;rating&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span><span class="p">]),</span> 
-          <span class="s2">&quot;review&quot;</span><span class="p">:</span> <span class="n">reviews</span><span class="p">}</span> 
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">film_reviews_full</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">film_dict</span><span class="p">)</span>
-<span class="n">film_reviews_full</span> <span class="o">=</span> <span class="n">film_reviews_full</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">&quot;film_id&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="s2">&quot;index&quot;</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Ecco il dataset prodotto da questa prima fase di elaborazione:</p>
+<p>Il dataset si presenta in questa forma:</p>
 <ul>
 <li>sono presenti 50.000 recensioni</li>
 <li>Le colonne sono 3:<ul>
@@ -13397,7 +13344,7 @@ amaas@cs.stanford.edu</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">film_reviews_full</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
@@ -13413,7 +13360,7 @@ amaas@cs.stanford.edu</p>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[12]:</div>
+    <div class="prompt output_prompt">Out[9]:</div>
 
 
 
@@ -13485,7 +13432,7 @@ amaas@cs.stanford.edu</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">film_reviews_full</span><span class="o">.</span><span class="n">tail</span><span class="p">()</span>
@@ -13501,7 +13448,7 @@ amaas@cs.stanford.edu</p>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[13]:</div>
+    <div class="prompt output_prompt">Out[10]:</div>
 
 
 
@@ -13573,7 +13520,7 @@ amaas@cs.stanford.edu</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">film_reviews_full</span><span class="o">.</span><span class="n">shape</span>
@@ -13589,7 +13536,7 @@ amaas@cs.stanford.edu</p>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[14]:</div>
+    <div class="prompt output_prompt">Out[11]:</div>
 
 
 
@@ -13614,10 +13561,10 @@ amaas@cs.stanford.edu</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">substrings</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;(&lt;br /&gt;)&#39;</span><span class="p">,</span> <span class="n">reviews</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">substrings</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;(&lt;br /&gt;)&#39;</span><span class="p">,</span> <span class="n">film_reviews_full</span><span class="p">[</span><span class="s1">&#39;review&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">()[</span><span class="mi">14</span><span class="p">])</span>
 <span class="n">substrings</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">substrings</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{Back.LIGHTBLACK_EX}</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{Fore.WHITE}</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">substrings</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">substrings</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">f</span><span class="s2">&quot;</span><span class="si">{Style.RESET_ALL}</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">substrings</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
 </pre></div>
@@ -13636,7 +13583,7 @@ amaas@cs.stanford.edu</p>
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>This is an example of why the majority of action films are the same. Generic and boring, there&#39;s really nothing worth watching here. A complete waste of the then barely-tapped talents of Ice-T and Ice Cube, who&#39;ve each proven many times over that they are capable of acting, and acting well. Don&#39;t bother with this one, go see New Jack City, Ricochet or watch New York Undercover for Ice-T, or Boyz n the Hood, Higher Learning or Friday for Ice Cube and see the real deal. Ice-T&#39;s horribly cliched dialogue alone makes this film grate at the teeth, and I&#39;m still wondering what the heck Bill Paxton was doing in this film? And why the heck does he always play the exact same character? From Aliens onward, every film I&#39;ve seen with Bill Paxton has him playing the exact same irritating character, and at least in Aliens his character died, which made it somewhat gratifying...<span class="ansi-white-fg ansi-black-intense-bg">&lt;br /&gt;&lt;br /&gt;</span>Overall, this is second-rate action trash. There are countless better films to see, and if you really want to see this one, watch Judgement Night, which is practically a carbon copy but has better acting and a better script. The only thing that made this at all worth watching was a decent hand on the camera - the cinematography was almost refreshing, which comes close to making up for the horrible film itself - but not quite. 4/10.
+<pre>&#34;All the world&#39;s a stage and its people actors in it&#34;--or something like that. Who the hell said that theatre stopped at the orchestra pit--or even at the theatre door? Why is not the audience participants in the theatrical experience, including the story itself?<span class="ansi-white-fg ansi-black-intense-bg">&lt;br /&gt;&lt;br /&gt;</span>This film was a grand experiment that said: &#34;Hey! the story is you and it needs more than your attention, it needs your active participation&#34;. &#34;Sometimes we bring the story to you, sometimes you have to go to the story.&#34;
 </pre>
 </div>
 </div>
@@ -13648,75 +13595,17 @@ amaas@cs.stanford.edu</p>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Pertanto, utilizzando il parser HTML del framework BeautifulSoup per rimuovere i tag con scarso significato semantico:</p>
+<p>Pertanto, rimuovo i tag con scarso significato semantico avvalendomi del parser HTML fornito dal framework BeautifulSoup:</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">reviews_filtered</span> <span class="o">=</span> <span class="p">[</span><span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">rev</span><span class="p">,</span> <span class="s2">&quot;html.parser&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span> <span class="k">for</span> <span class="n">rev</span> <span class="ow">in</span> <span class="n">reviews</span><span class="p">]</span>
-<span class="n">film_reviews_full</span><span class="p">[</span><span class="s1">&#39;review&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">reviews_filtered</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Ecco il testo "depurato" dei <code>&lt;br /&gt;</code>:</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[17]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">reviews_filtered</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[17]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>&#34;This is an example of why the majority of action films are the same. Generic and boring, there&#39;s really nothing worth watching here. A complete waste of the then barely-tapped talents of Ice-T and Ice Cube, who&#39;ve each proven many times over that they are capable of acting, and acting well. Don&#39;t bother with this one, go see New Jack City, Ricochet or watch New York Undercover for Ice-T, or Boyz n the Hood, Higher Learning or Friday for Ice Cube and see the real deal. Ice-T&#39;s horribly cliched dialogue alone makes this film grate at the teeth, and I&#39;m still wondering what the heck Bill Paxton was doing in this film? And why the heck does he always play the exact same character? From Aliens onward, every film I&#39;ve seen with Bill Paxton has him playing the exact same irritating character, and at least in Aliens his character died, which made it somewhat gratifying...Overall, this is second-rate action trash. There are countless better films to see, and if you really want to see this one, watch Judgement Night, which is practically a carbon copy but has better acting and a better script. The only thing that made this at all worth watching was a decent hand on the camera - the cinematography was almost refreshing, which comes close to making up for the horrible film itself - but not quite. 4/10.&#34;</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[18]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">film_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;film_id&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span><span class="p">]),</span> 
-        <span class="s2">&quot;rating&quot;</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span><span class="p">]),</span> 
-          <span class="s2">&quot;review&quot;</span><span class="p">:</span> <span class="n">reviews_filtered</span><span class="p">}</span>
-<span class="n">film_reviews_full</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">film_dict</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">film_reviews_full</span><span class="p">[</span><span class="s1">&#39;review&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">rev</span><span class="p">,</span> <span class="s2">&quot;html.parser&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span> <span class="k">for</span> <span class="n">rev</span> <span class="ow">in</span> <span class="n">film_reviews_full</span><span class="p">[</span><span class="s1">&#39;review&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_list</span><span class="p">()]</span>
 </pre></div>
 
     </div>
@@ -13734,7 +13623,7 @@ amaas@cs.stanford.edu</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[19]:</div>
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">max_colwidth</span> <span class="o">=</span> <span class="mi">100</span>
@@ -13752,7 +13641,7 @@ amaas@cs.stanford.edu</p>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[19]:</div>
+    <div class="prompt output_prompt">Out[15]:</div>
 
 
 
@@ -13788,25 +13677,25 @@ amaas@cs.stanford.edu</p>
       <td>Once again Mr. Costner has dragged out a movie for far longer than necessary. Aside from the ter...</td>
     </tr>
     <tr>
-      <th>12500</th>
+      <th>1</th>
       <td>0</td>
       <td>10</td>
       <td>I went and saw this movie last night after being coaxed to by a few friends of mine. I'll admit ...</td>
     </tr>
     <tr>
-      <th>25000</th>
+      <th>2</th>
       <td>0</td>
       <td>3</td>
       <td>Story of a man who has unnatural feelings for a pig. Starts out with a opening scene that is a t...</td>
     </tr>
     <tr>
-      <th>37500</th>
+      <th>3</th>
       <td>0</td>
       <td>9</td>
       <td>Bromwell High is a cartoon comedy. It ran at the same time as some other programs about school l...</td>
     </tr>
     <tr>
-      <th>16111</th>
+      <th>4</th>
       <td>1</td>
       <td>10</td>
       <td>My boyfriend and I went to watch The Guardian.At first I didn't want to watch it, but I loved th...</td>
@@ -13818,31 +13707,31 @@ amaas@cs.stanford.edu</p>
       <td>...</td>
     </tr>
     <tr>
-      <th>15274</th>
+      <th>49993</th>
       <td>12498</td>
-      <td>7</td>
-      <td>I'm torn about this show. While MOST parts of it I found to be HILARIOUS, other parts of it I fo...</td>
+      <td>2</td>
+      <td>This film has the kernel of a really good story. The work of the men and women of the Coast Guar...</td>
     </tr>
     <tr>
-      <th>15275</th>
-      <td>12499</td>
-      <td>10</td>
-      <td>I was plagued by nightmares involving Sesame Street and the Muppet Show during my childhood. I l...</td>
-    </tr>
-    <tr>
-      <th>27775</th>
+      <th>49997</th>
       <td>12499</td>
       <td>2</td>
       <td>I went to the movie as a Sneak Preview in Austria. So didn't have an idea what I am going to see...</td>
     </tr>
     <tr>
-      <th>40275</th>
+      <th>49998</th>
       <td>12499</td>
       <td>7</td>
       <td>I always feel strange and guilty saying it (because I'm a fairly well-educated non-teenager), bu...</td>
     </tr>
     <tr>
-      <th>2775</th>
+      <th>49996</th>
+      <td>12499</td>
+      <td>10</td>
+      <td>I was plagued by nightmares involving Sesame Street and the Muppet Show during my childhood. I l...</td>
+    </tr>
+    <tr>
+      <th>49999</th>
       <td>12499</td>
       <td>1</td>
       <td>This movie was sooo bad. It wasn't even funny at all. Not even the sarcastic scenes were funny. ...</td>
@@ -13862,7 +13751,7 @@ amaas@cs.stanford.edu</p>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="1)-Analisi-esplorativa">1) Analisi esplorativa<a class="anchor-link" href="#1)-Analisi-esplorativa">&#182;</a></h1>
+<h1 id="Analisi-esplorativa">Analisi esplorativa<a class="anchor-link" href="#Analisi-esplorativa">&#182;</a></h1>
 </div>
 </div>
 </div>
@@ -13876,7 +13765,7 @@ amaas@cs.stanford.edu</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[20]:</div>
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">film_reviews_full</span><span class="p">[</span><span class="s1">&#39;rating&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
@@ -13892,7 +13781,7 @@ amaas@cs.stanford.edu</p>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[20]:</div>
+    <div class="prompt output_prompt">Out[16]:</div>
 
 
 
@@ -13925,7 +13814,7 @@ Name: rating, dtype: int64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[21]:</div>
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">film_reviews_full</span><span class="p">[</span><span class="s1">&#39;rating&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">pie</span><span class="p">();</span>
@@ -13968,7 +13857,7 @@ Name: rating, dtype: int64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[22]:</div>
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">film_reviews_full</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">film_reviews_full</span><span class="p">[</span><span class="s1">&#39;rating&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;neg&quot;</span><span class="p">,</span> <span class="s2">&quot;pos&quot;</span><span class="p">)</span>
@@ -13993,7 +13882,7 @@ Name: rating, dtype: int64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[23]:</div>
+<div class="prompt input_prompt">In&nbsp;[19]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">film_reviews_full</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
@@ -14009,7 +13898,7 @@ Name: rating, dtype: int64</pre>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[23]:</div>
+    <div class="prompt output_prompt">Out[19]:</div>
 
 
 
@@ -14028,7 +13917,7 @@ Name: label, dtype: int64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[24]:</div>
+<div class="prompt input_prompt">In&nbsp;[20]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">film_reviews_full</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">pie</span><span class="p">();</span>
@@ -14071,7 +13960,7 @@ Name: label, dtype: int64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[25]:</div>
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">film_reviews_full</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">film_reviews_full</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;pos&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
@@ -14086,7 +13975,7 @@ Name: label, dtype: int64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[26]:</div>
+<div class="prompt input_prompt">In&nbsp;[22]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">film_reviews</span><span class="p">[</span><span class="s1">&#39;rating&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
@@ -14102,20 +13991,20 @@ Name: label, dtype: int64</pre>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[26]:</div>
+    <div class="prompt output_prompt">Out[22]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>1     2002
-10    1970
-8     1159
-4     1074
-3      974
-2      950
-7      944
-9      927
+<pre>1     2030
+10    1950
+8     1163
+4     1070
+7      972
+3      964
+2      936
+9      915
 Name: rating, dtype: int64</pre>
 </div>
 
@@ -14127,7 +14016,7 @@ Name: rating, dtype: int64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[27]:</div>
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">film_reviews</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">pie</span><span class="p">();</span>
@@ -14149,7 +14038,7 @@ Name: rating, dtype: int64</pre>
 
 
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
+<img src="data:image/png;base64,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
 "
 >
 </div>
@@ -14162,7 +14051,7 @@ Name: rating, dtype: int64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[28]:</div>
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">film_reviews</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
@@ -14178,14 +14067,14 @@ Name: rating, dtype: int64</pre>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[28]:</div>
+    <div class="prompt output_prompt">Out[24]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>pos    5000
-neg    5000
+<pre>neg    5000
+pos    5000
 Name: label, dtype: int64</pre>
 </div>
 
@@ -14197,7 +14086,7 @@ Name: label, dtype: int64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[29]:</div>
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">film_reviews</span><span class="o">.</span><span class="n">shape</span>
@@ -14213,7 +14102,7 @@ Name: label, dtype: int64</pre>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[29]:</div>
+    <div class="prompt output_prompt">Out[25]:</div>
 
 
 
@@ -14238,7 +14127,7 @@ Name: label, dtype: int64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[30]:</div>
+<div class="prompt input_prompt">In&nbsp;[26]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">if</span> <span class="s2">&quot;film_id&quot;</span> <span class="ow">in</span> <span class="n">film_reviews</span><span class="p">:</span>
@@ -14256,7 +14145,7 @@ Name: label, dtype: int64</pre>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[30]:</div>
+    <div class="prompt output_prompt">Out[26]:</div>
 
 
 
@@ -14286,33 +14175,33 @@ Name: label, dtype: int64</pre>
   </thead>
   <tbody>
     <tr>
-      <th>28611</th>
+      <th>6</th>
       <td>1</td>
       <td>Robert DeNiro plays the most unbelievably intelligent illiterate of all time. This movie is so w...</td>
       <td>neg</td>
     </tr>
     <tr>
-      <th>16111</th>
+      <th>4</th>
       <td>10</td>
       <td>My boyfriend and I went to watch The Guardian.At first I didn't want to watch it, but I loved th...</td>
       <td>pos</td>
     </tr>
     <tr>
-      <th>17222</th>
+      <th>8</th>
       <td>7</td>
       <td>My yardstick for measuring a movie's watch-ability is if I get squirmy. If I start shifting posi...</td>
       <td>pos</td>
     </tr>
     <tr>
-      <th>4722</th>
+      <th>9</th>
       <td>3</td>
       <td>It seems ever since 1982, about every two or three years we get a movie that claims to be "The N...</td>
       <td>neg</td>
     </tr>
     <tr>
-      <th>18333</th>
-      <td>7</td>
-      <td>How many movies are there that you can think of when you see a movie like this? I can't count th...</td>
+      <th>14</th>
+      <td>10</td>
+      <td>"All the world's a stage and its people actors in it"--or something like that. Who the hell said...</td>
       <td>pos</td>
     </tr>
   </tbody>
@@ -14336,7 +14225,7 @@ Name: label, dtype: int64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[31]:</div>
+<div class="prompt input_prompt">In&nbsp;[27]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">film_reviews</span><span class="p">[</span><span class="s1">&#39;review&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">(),</span> <span class="n">bins</span><span class="o">=</span><span class="mi">20</span><span class="p">);</span>
@@ -14358,7 +14247,7 @@ Name: label, dtype: int64</pre>
 
 
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAX0AAAD4CAYAAAAAczaOAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAADh0RVh0U29mdHdhcmUAbWF0cGxvdGxpYiB2ZXJzaW9uMy4xLjEsIGh0dHA6Ly9tYXRwbG90bGliLm9yZy8QZhcZAAAQD0lEQVR4nO3dW6xcV33H8e8PmwQKLXaIQa4d9TjCqggPJelRcEpVoYTminAeEskINS5NZalNJWgrUac8RFwiJVVFaNRyiUhaF1GSNKDGCqDIykV9IslxAyEXXJ9cStyk2MhJgCIogX8fZjlMnHO1x+f4nPX9SKPZ+7/XzKw1y/7NPnv2zKSqkCT14VWL3QFJ0sIx9CWpI4a+JHXE0Jekjhj6ktSRlYvdgZmcfPLJNTY2ttjdkKQlZffu3d+vqjVTbTuuQ39sbIyJiYnF7oYkLSlJ/mu6bR7ekaSOGPqS1BFDX5I6YuhLUkcMfUnqiKEvSR0x9CWpI4a+JHXE0JekjhzXn8hdTGPbv3rEt33qmotG2BNJGh339CWpI4a+JHXE0Jekjhj6ktQRQ1+SOmLoS1JHDH1J6oihL0kdMfQlqSOGviR1xNCXpI4Y+pLUEUNfkjpi6EtSR+Yc+klWJHkwyR1tfUOS+5LsTXJLkhNa/cS2Ptm2jw3dx5WtvifJeaMejCRpZvPZ0/8g8NjQ+rXAdVW1EXgOuLzVLweeq6q3ANe1diQ5DdgCvA04H/h0khVH131J0nzMKfSTrAcuAj7f1gOcDdzWmuwALm7Lm9s6bfs5rf1m4Oaq+mlVPQlMAmeOYhCSpLmZ657+p4APA79o628Enq+qF9v6PmBdW14HPA3Qtr/Q2r9Un+I2kqQFMGvoJ3kPsL+qdg+Xp2has2yb6TbDj7ctyUSSiQMHDszWPUnSPMxlT/+dwHuTPAXczOCwzqeAVUkO/cbueuCZtrwPOAWgbX8DcHC4PsVtXlJVN1TVeFWNr1mzZt4DkiRNb9bQr6orq2p9VY0xeCP27qp6P3APcElrthW4vS3vbOu07XdXVbX6lnZ2zwZgI3D/yEYiSZrVytmbTOuvgJuTfAJ4ELix1W8EvpBkksEe/haAqnokya3Ao8CLwBVV9fOjeHxJ0jzNK/Sr6l7g3rb8BFOcfVNVPwEuneb2VwNXz7eTkqTR8BO5ktQRQ1+SOmLoS1JHDH1J6oihL0kdMfQlqSOGviR1xNCXpI4Y+pLUEUNfkjpi6EtSRwx9SeqIoS9JHTH0Jakjhr4kdcTQl6SOGPqS1BFDX5I6YuhLUkcMfUnqiKEvSR0x9CWpI4a+JHXE0Jekjhj6ktQRQ1+SOmLoS1JHDH1J6oihL0kdMfQlqSOGviR1xNCXpI4Y+pLUEUNfkjpi6EtSRwx9SeqIoS9JHTH0Jakjhr4kdWTW0E/ymiT3J/lWkkeSfLTVNyS5L8neJLckOaHVT2zrk2372NB9Xdnqe5Kcd6wGJUma2lz29H8KnF1VvwW8HTg/ySbgWuC6qtoIPAdc3tpfDjxXVW8BrmvtSHIasAV4G3A+8OkkK0Y5GEnSzGYN/Rr4UVt9dbsUcDZwW6vvAC5uy5vbOm37OUnS6jdX1U+r6klgEjhzJKOQJM3JnI7pJ1mR5JvAfmAX8DjwfFW92JrsA9a15XXA0wBt+wvAG4frU9xm+LG2JZlIMnHgwIH5j0iSNK05hX5V/byq3g6sZ7B3/tapmrXrTLNtuvrhj3VDVY1X1fiaNWvm0j1J0hzN6+ydqnoeuBfYBKxKsrJtWg8805b3AacAtO1vAA4O16e4jSRpAczl7J01SVa15dcC7wYeA+4BLmnNtgK3t+WdbZ22/e6qqlbf0s7u2QBsBO4f1UAkSbNbOXsT1gI72pk2rwJurao7kjwK3JzkE8CDwI2t/Y3AF5JMMtjD3wJQVY8kuRV4FHgRuKKqfj7a4UiSZjJr6FfVQ8DpU9SfYIqzb6rqJ8Cl09zX1cDV8++mJGkU/ESuJHXE0Jekjhj6ktQRQ1+SOmLoS1JHDH1J6oihL0kdMfQlqSOGviR1xNCXpI4Y+pLUEUNfkjpi6EtSRwx9SeqIoS9JHTH0Jakjhr4kdcTQl6SOGPqS1BFDX5I6YuhLUkcMfUnqiKEvSR0x9CWpI4a+JHXE0Jekjhj6ktQRQ1+SOmLoS1JHDH1J6oihL0kdMfQlqSOGviR1xNCXpI4Y+pLUEUNfkjpi6EtSRwx9SerIrKGf5JQk9yR5LMkjST7Y6icl2ZVkb7te3epJcn2SySQPJTlj6L62tvZ7k2w9dsOSJE1lLnv6LwJ/WVVvBTYBVyQ5DdgO3FVVG4G72jrABcDGdtkGfAYGLxLAVcA7gDOBqw69UEiSFsasoV9Vz1bVf7TlHwKPAeuAzcCO1mwHcHFb3gz8cw18A1iVZC1wHrCrqg5W1XPALuD8kY5GkjSjeR3TTzIGnA7cB7y5qp6FwQsD8KbWbB3w9NDN9rXadPXDH2NbkokkEwcOHJhP9yRJs5hz6Cd5PfBl4ENV9YOZmk5RqxnqLy9U3VBV41U1vmbNmrl2T5I0B3MK/SSvZhD4X6yqr7Ty99phG9r1/lbfB5wydPP1wDMz1CVJC2QuZ+8EuBF4rKo+ObRpJ3DoDJytwO1D9cvaWTybgBfa4Z87gXOTrG5v4J7bapKkBbJyDm3eCfwB8O0k32y1vwauAW5NcjnwXeDStu1rwIXAJPBj4AMAVXUwyceBB1q7j1XVwZGMQpI0J6l6xWH148b4+HhNTEwsymOPbf/qojzuU9dctCiPK2n5SLK7qsan2uYnciWpI4a+JHXE0Jekjhj6ktQRQ1+SOmLoS1JHDH1J6oihL0kdMfQlqSOGviR1xNCXpI4Y+pLUEUNfkjpi6EtSRwx9SeqIoS9JHTH0Jakjhr4kdcTQl6SOGPqS1BFDX5I6YuhLUkcMfUnqiKEvSR0x9CWpI4a+JHXE0Jekjhj6ktQRQ1+SOrJysTtwLI1t/+pid0GSjivu6UtSRwx9SeqIoS9JHTH0Jakjhr4kdcTQl6SOGPqS1BFDX5I6MmvoJ7kpyf4kDw/VTkqyK8nedr261ZPk+iSTSR5KcsbQbba29nuTbD02w5EkzWQue/r/BJx/WG07cFdVbQTuausAFwAb22Ub8BkYvEgAVwHvAM4Erjr0QiFJWjizhn5V/Ttw8LDyZmBHW94BXDxU/+ca+AawKsla4DxgV1UdrKrngF288oVEknSMHekx/TdX1bMA7fpNrb4OeHqo3b5Wm67+Ckm2JZlIMnHgwIEj7J4kaSqjfiM3U9Rqhvori1U3VNV4VY2vWbNmpJ2TpN4d6bdsfi/J2qp6th2+2d/q+4BThtqtB55p9XcdVr/3CB97WTuabwZ96pqLRtgTScvRke7p7wQOnYGzFbh9qH5ZO4tnE/BCO/xzJ3BuktXtDdxzW02StIBm3dNP8iUGe+knJ9nH4Cyca4Bbk1wOfBe4tDX/GnAhMAn8GPgAQFUdTPJx4IHW7mNVdfibw5KkY2zW0K+q902z6Zwp2hZwxTT3cxNw07x6J0kaKT+RK0kdMfQlqSOGviR1xNCXpI4Y+pLUEUNfkjpi6EtSRwx9SeqIoS9JHTH0Jakjhr4kdcTQl6SOGPqS1BFDX5I6YuhLUkeO9OcSdRw6mp9aBH9uUeqBe/qS1BFDX5I6YuhLUkcMfUnqiKEvSR0x9CWpI4a+JHXE0Jekjhj6ktQRP5GrlxzNJ3r9NK+0NLinL0kdMfQlqSOGviR1xNCXpI4Y+pLUEc/e0Uh45o+0NLinL0kdMfQlqSOGviR1xGP6WnS+HyAtHENfS5o/Bi/Nj6GvrvlXhnqz4KGf5Hzg74AVwOer6pqF7oM0Cr5gaCla0NBPsgL4B+D3gX3AA0l2VtWjC9kPabH5gqHFstBn75wJTFbVE1X1f8DNwOYF7oMkdWuhD++sA54eWt8HvGO4QZJtwLa2+qMke47gcU4Gvn9EPVy6ehtzb+OFNuZcu9jdWDDdzvEI7uc3ptuw0KGfKWr1spWqG4AbjupBkomqGj+a+1hqehtzb+OF/sbc23hhYca80Id39gGnDK2vB55Z4D5IUrcWOvQfADYm2ZDkBGALsHOB+yBJ3VrQwztV9WKSPwPuZHDK5k1V9cgxeKijOjy0RPU25t7GC/2NubfxwgKMOVU1eytJ0rLgF65JUkcMfUnqyLIK/STnJ9mTZDLJ9sXuz9FIckqSe5I8luSRJB9s9ZOS7Eqyt12vbvUkub6N/aEkZwzd19bWfm+SrYs1prlIsiLJg0nuaOsbktzX+n5LOwGAJCe29cm2fWzoPq5s9T1JzluckcxNklVJbkvynTbXZy3nOU7y5+3f88NJvpTkNcttjpPclGR/koeHaiOb0yS/neTb7TbXJ5nqVPjpVdWyuDB4Y/hx4FTgBOBbwGmL3a+jGM9a4Iy2/KvAfwKnAX8DbG/17cC1bflC4OsMPguxCbiv1U8CnmjXq9vy6sUe3wzj/gvgX4A72vqtwJa2/FngT9rynwKfbctbgFva8mlt7k8ENrR/EysWe1wzjHcH8Mdt+QRg1XKdYwYfznwSeO3Q3P7hcptj4PeAM4CHh2ojm1PgfuCsdpuvAxfMq3+L/QSN8Ik+C7hzaP1K4MrF7tcIx3c7g+8s2gOsbbW1wJ62/DngfUPt97Tt7wM+N1R/Wbvj6cLgcxt3AWcDd7R/1N8HVh4+xwzOADurLa9s7XL4vA+3O94uwK+1EMxh9WU5x/zyE/kntTm7AzhvOc4xMHZY6I9kTtu27wzVX9ZuLpfldHhnqq94WLdIfRmp9mft6cB9wJur6lmAdv2m1my68S+l5+VTwIeBX7T1NwLPV9WLbX247y+Nq21/obVfSuM9FTgA/GM7pPX5JK9jmc5xVf038LfAd4FnGczZbpb3HB8yqjld15YPr8/Zcgr9Wb/iYSlK8nrgy8CHquoHMzWdolYz1I8rSd4D7K+q3cPlKZrWLNuWxHiblQwOA3ymqk4H/pfBn/7TWdJjbsexNzM4JPPrwOuAC6ZoupzmeDbzHeNRj305hf6y+4qHJK9mEPhfrKqvtPL3kqxt29cC+1t9uvEvleflncB7kzzF4NtXz2aw578qyaEPEQ73/aVxte1vAA6ydMYLg77uq6r72vptDF4Eluscvxt4sqoOVNXPgK8Av8PynuNDRjWn+9ry4fU5W06hv6y+4qG9I38j8FhVfXJo007g0Dv5Wxkc6z9Uv6ydDbAJeKH9GXkncG6S1W1P69xWO65U1ZVVtb6qxhjM3d1V9X7gHuCS1uzw8R56Hi5p7avVt7QzPzYAGxm88XXcqar/AZ5O8putdA7wKMt0jhkc1tmU5Ffav+9D4122czxkJHPatv0wyab2HF42dF9zs9hveIz4zZMLGZzl8jjwkcXuz1GO5XcZ/Nn2EPDNdrmQwTHNu4C97fqk1j4MfqDmceDbwPjQff0RMNkuH1jssc1h7O/il2fvnMrgP/Qk8K/Aia3+mrY+2bafOnT7j7TnYQ/zPLNhEcb6dmCizfO/MThTY9nOMfBR4DvAw8AXGJyBs6zmGPgSg/csfsZgz/zyUc4pMN6ev8eBv+ewEwFmu/g1DJLUkeV0eEeSNAtDX5I6YuhLUkcMfUnqiKEvSR0x9CWpI4a+JHXk/wE2cG6jEyqaawAAAABJRU5ErkJggg==
 "
 >
 </div>
@@ -14379,7 +14268,7 @@ Name: label, dtype: int64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[32]:</div>
+<div class="prompt input_prompt">In&nbsp;[28]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">film_reviews</span><span class="p">[</span><span class="s1">&#39;review&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span><span class="o">.</span><span class="n">describe</span><span class="p">())</span>
@@ -14395,7 +14284,7 @@ Name: label, dtype: int64</pre>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[32]:</div>
+    <div class="prompt output_prompt">Out[28]:</div>
 
 
 
@@ -14428,11 +14317,11 @@ Name: label, dtype: int64</pre>
     </tr>
     <tr>
       <th>mean</th>
-      <td>1270.123600</td>
+      <td>1276.819700</td>
     </tr>
     <tr>
       <th>std</th>
-      <td>943.140377</td>
+      <td>955.851782</td>
     </tr>
     <tr>
       <th>min</th>
@@ -14440,15 +14329,15 @@ Name: label, dtype: int64</pre>
     </tr>
     <tr>
       <th>25%</th>
-      <td>692.000000</td>
+      <td>691.750000</td>
     </tr>
     <tr>
       <th>50%</th>
-      <td>950.000000</td>
+      <td>953.500000</td>
     </tr>
     <tr>
       <th>75%</th>
-      <td>1536.000000</td>
+      <td>1539.250000</td>
     </tr>
     <tr>
       <th>max</th>
@@ -14467,7 +14356,7 @@ Name: label, dtype: int64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[33]:</div>
+<div class="prompt input_prompt">In&nbsp;[29]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">film_reviews</span><span class="p">[</span><span class="s1">&#39;review&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
@@ -14483,17 +14372,17 @@ Name: label, dtype: int64</pre>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[33]:</div>
+    <div class="prompt output_prompt">Out[29]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>26068     52
-36109     80
-34436     94
-40286    120
-47867    131
+<pre>43850     52
+8886      65
+3499      80
+28973     94
+26795    119
 Name: review, dtype: int64</pre>
 </div>
 
@@ -14505,7 +14394,7 @@ Name: review, dtype: int64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[34]:</div>
+<div class="prompt input_prompt">In&nbsp;[30]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">film_reviews</span><span class="p">[</span><span class="s1">&#39;review&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span><span class="o">.</span><span class="n">tail</span><span class="p">()</span>
@@ -14521,17 +14410,17 @@ Name: review, dtype: int64</pre>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[34]:</div>
+    <div class="prompt output_prompt">Out[30]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>41242     6560
-34529     6928
-34972     7665
-28533     8681
-43758    10099
+<pre>8473      6560
+29308     6928
+30906     7665
+7721      8681
+17533    10099
 Name: review, dtype: int64</pre>
 </div>
 
@@ -14551,7 +14440,7 @@ Name: review, dtype: int64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[35]:</div>
+<div class="prompt input_prompt">In&nbsp;[31]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">reviews</span> <span class="o">=</span> <span class="p">{</span>
@@ -14576,7 +14465,7 @@ Name: review, dtype: int64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[36]:</div>
+<div class="prompt input_prompt">In&nbsp;[32]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">count_word</span><span class="p">[</span><span class="s1">&#39;len&#39;</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="mi">20</span><span class="p">);</span>
@@ -14598,7 +14487,7 @@ Name: review, dtype: int64</pre>
 
 
 <div class="output_png output_subarea ">
-<img src="data:image/png;base64,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
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAX0AAAD4CAYAAAAAczaOAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAADh0RVh0U29mdHdhcmUAbWF0cGxvdGxpYiB2ZXJzaW9uMy4xLjEsIGh0dHA6Ly9tYXRwbG90bGliLm9yZy8QZhcZAAAQZ0lEQVR4nO3df6zddX3H8edLKrjNH4BUQ1q2W2e3iH9MWIMsTrOI4aezbJOlxszGkTRLMNFsyywzGU5lgS2TzWxqmDQW4wTmj0BEgw3izJIBlp8CFXtBlI6OVouocbIV3/vjfC4e6v3Z3nvObT/PR3Jyvt/39/M99/39ntvX+fZ7vufcVBWSpD48Z9wNSJJGx9CXpI4Y+pLUEUNfkjpi6EtSR1aMu4HZnHDCCTUxMTHuNiTpsHLHHXd8t6pWTrdsWYf+xMQE27dvH3cbknRYSfLtmZZ5ekeSOmLoS1JHDH1J6oihL0kdMfQlqSOGviR1xNCXpI4Y+pLUEUNfkjqyrD+RO04Tm2886HUfuey8RexEkhaPR/qS1BFDX5I6YuhLUkcMfUnqiKEvSR0x9CWpI4a+JHXE0Jekjhj6ktQRQ1+SOmLoS1JHDH1J6oihL0kdmXfoJzkqyV1JPt/m1yS5LcnOJNcmObrVj2nzk235xNBjXNzqDyY5a7E3RpI0u4Uc6b8T2DE0fzlwRVWtBZ4ALmz1C4EnqurlwBVtHElOBjYArwTOBj6c5KhDa1+StBDzCv0kq4HzgI+1+QCvBz7dhmwFzm/T69s8bfkZbfx64JqqeqqqvgVMAqctxkZIkuZnvkf6/wD8BfDTNv9i4PtVtb/N7wJWtelVwKMAbfmTbfwz9WnWeUaSTUm2J9m+d+/eBWyKJGkuc4Z+kjcCe6rqjuHyNENrjmWzrfOzQtWVVbWuqtatXLlyrvYkSQswnz+X+BrgTUnOBZ4HvJDBkf+xSVa0o/nVwGNt/C7gJGBXkhXAi4B9Q/Upw+tIkkZgziP9qrq4qlZX1QSDN2K/XFVvBW4B3tyGbQSub9M3tHna8i9XVbX6hnZ1zxpgLXD7om2JJGlOh/KH0d8NXJPkA8BdwFWtfhXwiSSTDI7wNwBU1f1JrgMeAPYDF1XV04fw8yVJC7Sg0K+qrwBfadMPM83VN1X1E+CCGda/FLh0oU1KkhaHn8iVpI4Y+pLUEUNfkjpi6EtSRwx9SeqIoS9JHTH0Jakjhr4kdcTQl6SOGPqS1BFDX5I6YuhLUkcMfUnqiKEvSR0x9CWpI4a+JHXE0Jekjhj6ktQRQ1+SOmLoS1JHDH1J6oihL0kdMfQlqSOGviR1xNCXpI4Y+pLUEUNfkjpi6EtSRwx9SeqIoS9JHTH0Jakjhr4kdcTQl6SOGPqS1BFDX5I6YuhLUkcMfUnqiKEvSR0x9CWpI3OGfpLnJbk9yT1J7k/y162+JsltSXYmuTbJ0a1+TJufbMsnhh7r4lZ/MMlZS7VRkqTpzedI/yng9VX1G8CrgLOTnA5cDlxRVWuBJ4AL2/gLgSeq6uXAFW0cSU4GNgCvBM4GPpzkqMXcGEnS7OYM/Rr4UZt9brsV8Hrg062+FTi/Ta9v87TlZyRJq19TVU9V1beASeC0RdkKSdK8zOucfpKjktwN7AG2AQ8B36+q/W3ILmBVm14FPArQlj8JvHi4Ps06wz9rU5LtSbbv3bt34VskSZrRvEK/qp6uqlcBqxkcnb9iumHtPjMsm6l+4M+6sqrWVdW6lStXzqc9SdI8Lejqnar6PvAV4HTg2CQr2qLVwGNtehdwEkBb/iJg33B9mnUkSSMwn6t3ViY5tk3/AvAGYAdwC/DmNmwjcH2bvqHN05Z/uaqq1Te0q3vWAGuB2xdrQyRJc1sx9xBOBLa2K22eA1xXVZ9P8gBwTZIPAHcBV7XxVwGfSDLJ4Ah/A0BV3Z/kOuABYD9wUVU9vbibI0mazZyhX1X3AqdMU3+Yaa6+qaqfABfM8FiXApcuvE1J0mLwE7mS1BFDX5I6YuhLUkcMfUnqiKEvSR0x9CWpI4a+JHXE0Jekjhj6ktQRQ1+SOmLoS1JHDH1J6oihL0kdMfQlqSOGviR1xNCXpI4Y+pLUEUNfkjpi6EtSRwx9SeqIoS9JHTH0Jakjhr4kdcTQl6SOGPqS1BFDX5I6YuhLUkcMfUnqiKEvSR0x9CWpI4a+JHXE0Jekjhj6ktQRQ1+SOmLoS1JHDH1J6oihL0kdMfQlqSNzhn6Sk5LckmRHkvuTvLPVj0+yLcnOdn9cqyfJh5JMJrk3yalDj7Wxjd+ZZOPSbZYkaTrzOdLfD/xZVb0COB24KMnJwGbg5qpaC9zc5gHOAda22ybgIzB4kQAuAV4NnAZcMvVCIUkajTlDv6p2V9WdbfqHwA5gFbAe2NqGbQXOb9Prgatr4Fbg2CQnAmcB26pqX1U9AWwDzl7UrZEkzWpB5/STTACnALcBL62q3TB4YQBe0oatAh4dWm1Xq81UP/BnbEqyPcn2vXv3LqQ9SdIc5h36SZ4PfAZ4V1X9YLah09RqlvqzC1VXVtW6qlq3cuXK+bYnSZqHeYV+kucyCPxPVtVnW/nxdtqGdr+n1XcBJw2tvhp4bJa6JGlEVsw1IEmAq4AdVfXBoUU3ABuBy9r99UP1dyS5hsGbtk9W1e4kNwF/M/Tm7ZnAxYuzGcvLxOYbD3rdRy47bxE7kaRnmzP0gdcAfwR8PcndrfaXDML+uiQXAt8BLmjLvgCcC0wCPwbeDlBV+5K8H/haG/e+qtq3KFshSZqXOUO/qv6D6c/HA5wxzfgCLprhsbYAWxbSoCRp8fiJXEnqiKEvSR0x9CWpI4a+JHXE0Jekjhj6ktQRQ1+SOmLoS1JHDH1J6oihL0kdMfQlqSOGviR1xNCXpI4Y+pLUEUNfkjpi6EtSRwx9SeqIoS9JHTH0Jakjhr4kdcTQl6SOGPqS1BFDX5I6YuhLUkcMfUnqiKEvSR0x9CWpI4a+JHXE0Jekjhj6ktSRFeNuYClNbL5x3C1I0rLikb4kdcTQl6SOGPqS1BFDX5I6YuhLUkcMfUnqiKEvSR2ZM/STbEmyJ8l9Q7Xjk2xLsrPdH9fqSfKhJJNJ7k1y6tA6G9v4nUk2Ls3mSJJmM58j/Y8DZx9Q2wzcXFVrgZvbPMA5wNp22wR8BAYvEsAlwKuB04BLpl4oJEmjM2foV9VXgX0HlNcDW9v0VuD8ofrVNXArcGySE4GzgG1Vta+qngC28fMvJJKkJXaw5/RfWlW7Adr9S1p9FfDo0LhdrTZT/eck2ZRke5Lte/fuPcj2JEnTWezv3sk0tZql/vPFqiuBKwHWrVs37Zgj2aF8X9Ajl523iJ1IOhId7JH+4+20De1+T6vvAk4aGrcaeGyWuiRphA429G8Apq7A2QhcP1R/W7uK53TgyXb65ybgzCTHtTdwz2w1SdIIzXl6J8mngN8BTkiyi8FVOJcB1yW5EPgOcEEb/gXgXGAS+DHwdoCq2pfk/cDX2rj3VdWBbw5LkpbYnKFfVW+ZYdEZ04wt4KIZHmcLsGVB3UmSFpWfyJWkjhj6ktQRQ1+SOmLoS1JHDH1J6oihL0kdMfQlqSOGviR1xNCXpI4Y+pLUEUNfkjpi6EtSRwx9SeqIoS9JHTH0Jakjhr4kdcTQl6SOGPqS1JE5/1yiDh8Tm288pPUfuey8RepE0nLlkb4kdcTQl6SOGPqS1BFDX5I6YuhLUkcMfUnqiJds6hmHcsmnl3tKhweP9CWpI4a+JHXE0Jekjhj6ktQRQ1+SOmLoS1JHvGRTi8LLPaXDg0f6ktQRQ1+SOmLoS1JHPKevsfP9AGl0DH0d1vwTkdLCGPrSQfJ/KDocjTz0k5wN/CNwFPCxqrps1D1IUw71fwrS4Wakb+QmOQr4Z+Ac4GTgLUlOHmUPktSzUR/pnwZMVtXDAEmuAdYDD4y4D2msPDWkcRl16K8CHh2a3wW8enhAkk3Apjb7oyQPHsTPOQH47kF1OHr2uvgOlz7hIHrN5UvUydyO6P06RkvR66/MtGDUoZ9pavWsmaorgSsP6Yck26tq3aE8xqjY6+I7XPoEe10q9jqzUX84axdw0tD8auCxEfcgSd0adeh/DVibZE2So4ENwA0j7kGSujXS0ztVtT/JO4CbGFyyuaWq7l+CH3VIp4dGzF4X3+HSJ9jrUrHXGaSq5h4lSToi+IVrktQRQ1+SOnJEhX6Ss5M8mGQyyeZl0M9JSW5JsiPJ/Une2ervTfJfSe5ut3OH1rm49f9gkrNG3O8jSb7eetreascn2ZZkZ7s/rtWT5EOt13uTnDrCPn99aN/dneQHSd61XPZrki1J9iS5b6i24P2YZGMbvzPJxhH1+XdJvtF6+VySY1t9Isn/DO3bjw6t85vt92aybct0l2YvRa8Lfr5HkREz9HrtUJ+PJLm71Ue/X6vqiLgxeGP4IeBlwNHAPcDJY+7pRODUNv0C4JsMvn7ivcCfTzP+5Nb3McCatj1HjbDfR4ATDqj9LbC5TW8GLm/T5wJfZPDZi9OB28b4vP83gw+jLIv9CrwOOBW472D3I3A88HC7P65NHzeCPs8EVrTpy4f6nBged8Dj3A78VtuGLwLnjGifLuj5HlVGTNfrAcv/Hvirce3XI+lI/5mveKiq/wWmvuJhbKpqd1Xd2aZ/COxg8KnkmawHrqmqp6rqW8Akg+0ap/XA1ja9FTh/qH51DdwKHJvkxDH0dwbwUFV9e5YxI92vVfVVYN80PSxkP54FbKuqfVX1BLANOHup+6yqL1XV/jZ7K4PP0syo9frCqvrPGiTV1fxs25a011nM9HyPJCNm67Udrf8h8KnZHmMp9+uRFPrTfcXDbAE7UkkmgFOA21rpHe2/0Fum/qvP+LehgC8luSODr8MAeGlV7YbBixjwklYfd69TNvDsf0DLcb/Cwvfjcuj5jxkcYU5Zk+SuJP+e5LWttqr1NmXUfS7k+V4O+/S1wONVtXOoNtL9eiSF/pxf8TAuSZ4PfAZ4V1X9APgI8KvAq4DdDP67B+PfhtdU1akMvgX1oiSvm2XsuHslgw/4vQn4t1Zarvt1NjP1Ntaek7wH2A98spV2A79cVacAfwr8a5IXMt4+F/p8L4ffg7fw7IOUke/XIyn0l+VXPCR5LoPA/2RVfRagqh6vqqer6qfAv/CzUw1j3Yaqeqzd7wE+1/p6fOq0Tbvfsxx6bc4B7qyqx2H57tdmoftxbD23N43fCLy1nVqgnSr5Xpu+g8G58V9rfQ6fAhpZnwfxfI/19yDJCuD3gWunauPYr0dS6C+7r3ho5++uAnZU1QeH6sPnvn8PmHqX/wZgQ5JjkqwB1jJ4M2cUvf5SkhdMTTN4Q+++1tPUlSMbgeuHen1bu/rkdODJqdMXI/Sso6bluF+HLHQ/3gScmeS4dtrizFZbUhn8kaN3A2+qqh8P1Vdm8PcwSPIyBvvw4dbrD5Oc3n7f3za0bUvd60Kf73FnxBuAb1TVM6dtxrJfF/ud63HeGFwJ8U0Gr5bvWQb9/DaD/5LdC9zdbucCnwC+3uo3ACcOrfOe1v+DLMFVELP0+jIGVzPcA9w/tf+AFwM3Azvb/fGtHgZ/EOehti3rRrxvfxH4HvCiodqy2K8MXoh2A//H4IjtwoPZjwzOqU+229tH1Ockg/PeU7+vH21j/6D9XtwD3An87tDjrGMQuA8B/0T7pP8Iel3w8z2KjJiu11b/OPAnB4wd+X71axgkqSNH0ukdSdIcDH1J6oihL0kdMfQlqSOGviR1xNCXpI4Y+pLUkf8Hlp9wNEOjQhQAAAAASUVORK5CYII=
 "
 >
 </div>
@@ -14619,7 +14508,7 @@ Name: review, dtype: int64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[37]:</div>
+<div class="prompt input_prompt">In&nbsp;[33]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">count_word</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
@@ -14635,7 +14524,7 @@ Name: review, dtype: int64</pre>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[37]:</div>
+    <div class="prompt output_prompt">Out[33]:</div>
 
 
 
@@ -14668,11 +14557,11 @@ Name: review, dtype: int64</pre>
     </tr>
     <tr>
       <th>mean</th>
-      <td>224.468100</td>
+      <td>225.560800</td>
     </tr>
     <tr>
       <th>std</th>
-      <td>163.320743</td>
+      <td>165.484776</td>
     </tr>
     <tr>
       <th>min</th>
@@ -14707,7 +14596,7 @@ Name: review, dtype: int64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[38]:</div>
+<div class="prompt input_prompt">In&nbsp;[34]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">count_word</span><span class="p">[</span><span class="s1">&#39;len&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
@@ -14723,17 +14612,17 @@ Name: review, dtype: int64</pre>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[38]:</div>
+    <div class="prompt output_prompt">Out[34]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>26068    10
-36109    14
-34436    17
-15459    20
-47867    23
+<pre>43850    10
+3499     14
+8886     14
+28973    17
+26795    19
 Name: len, dtype: int64</pre>
 </div>
 
@@ -14745,7 +14634,7 @@ Name: len, dtype: int64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[39]:</div>
+<div class="prompt input_prompt">In&nbsp;[35]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">count_word</span><span class="p">[</span><span class="s1">&#39;len&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tail</span><span class="p">()</span>
@@ -14761,17 +14650,17 @@ Name: len, dtype: int64</pre>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[39]:</div>
+    <div class="prompt output_prompt">Out[35]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>41242    1138
-34529    1156
-34972    1360
-28533    1474
-43758    1786
+<pre>8473     1138
+29308    1156
+30906    1360
+7721     1474
+17533    1786
 Name: len, dtype: int64</pre>
 </div>
 
@@ -14784,7 +14673,7 @@ Name: len, dtype: int64</pre>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Vector-space-model">Vector space model<a class="anchor-link" href="#Vector-space-model">&#182;</a></h1><p>Per effettuare la Sentiment Analsys è stato definita una Bag of Word, contenente l'insieme delle parole in ogni documento, senza ripetizioni e senza considerare il loro ordine all'interno dei documenti:</p>
+<h1 id="Vector-space-model">Vector space model<a class="anchor-link" href="#Vector-space-model">&#182;</a></h1><p>Per effettuare la Sentiment Analsys è stata definita una Bag of Word, contenente l'insieme delle parole in ogni documento, senza ripetizioni e senza considerare il loro ordine all'interno dei documenti:</p>
 <ul>
 <li>definito un dizionario in comune, ogni recensione viene tradotta in un vettore all'interno dell'iperspazio di classificazione, in cui ad ogni singola parola viene associato un peso in relazione alla sua occorrenza all'interno delle recensioni.</li>
 <li>le dimensioni dello spazio vettoriale sono date dal numero di parole distinte identificate</li>
@@ -14834,7 +14723,7 @@ Per far questo, è stato utilizzato un filtro <code>TfidfVectorizer</code>:</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[40]:</div>
+<div class="prompt input_prompt">In&nbsp;[36]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">film_reviews_train</span><span class="p">,</span> <span class="n">film_reviews_val</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">film_reviews</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
@@ -14847,7 +14736,7 @@ Per far questo, è stato utilizzato un filtro <code>TfidfVectorizer</code>:</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[41]:</div>
+<div class="prompt input_prompt">In&nbsp;[37]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
@@ -14877,7 +14766,7 @@ Per far questo, è stato utilizzato un filtro <code>TfidfVectorizer</code>:</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[42]:</div>
+<div class="prompt input_prompt">In&nbsp;[38]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">grid</span> <span class="o">=</span> <span class="p">[{</span>
@@ -14904,7 +14793,7 @@ Per far questo, è stato utilizzato un filtro <code>TfidfVectorizer</code>:</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[43]:</div>
+<div class="prompt input_prompt">In&nbsp;[39]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">skf</span> <span class="o">=</span> <span class="n">StratifiedKFold</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
@@ -14919,7 +14808,7 @@ Per far questo, è stato utilizzato un filtro <code>TfidfVectorizer</code>:</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[44]:</div>
+<div class="prompt input_prompt">In&nbsp;[40]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">gs</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">film_reviews_val</span><span class="p">[</span><span class="s1">&#39;review&#39;</span><span class="p">],</span> <span class="n">film_reviews_val</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
@@ -14935,13 +14824,13 @@ Per far questo, è stato utilizzato un filtro <code>TfidfVectorizer</code>:</p>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[44]:</div>
+    <div class="prompt output_prompt">Out[40]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>0.876</pre>
+<pre>0.8746666666666667</pre>
 </div>
 
 </div>
@@ -14960,7 +14849,7 @@ Per far questo, è stato utilizzato un filtro <code>TfidfVectorizer</code>:</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[45]:</div>
+<div class="prompt input_prompt">In&nbsp;[41]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">gs</span><span class="o">.</span><span class="n">best_params_</span><span class="p">)</span>
@@ -14976,14 +14865,14 @@ Per far questo, è stato utilizzato un filtro <code>TfidfVectorizer</code>:</p>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[45]:</div>
+    <div class="prompt output_prompt">Out[41]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
 <pre>classifier__alpha                                                                                                        1e-06
-classifier__penalty                                                                                                         l2
+classifier__penalty                                                                                                         l1
 vectorizer                 TfidfVectorizer(analyzer=&#39;word&#39;, binary=False, decode_error=&#39;strict&#39;,\n                dtype=&lt;cl...
 vectorizer__ngram_range                                                                                                 (1, 2)
 dtype: object</pre>
@@ -15005,7 +14894,7 @@ dtype: object</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[46]:</div>
+<div class="prompt input_prompt">In&nbsp;[42]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">gs</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;rank_test_score&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
@@ -15021,7 +14910,7 @@ dtype: object</pre>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[46]:</div>
+    <div class="prompt output_prompt">Out[42]:</div>
 
 
 
@@ -15063,93 +14952,93 @@ dtype: object</pre>
   </thead>
   <tbody>
     <tr>
-      <th>31</th>
-      <td>4.425573</td>
-      <td>0.084635</td>
-      <td>1.486683</td>
-      <td>0.451600</td>
+      <th>27</th>
+      <td>4.888144</td>
+      <td>0.082536</td>
+      <td>1.213328</td>
+      <td>0.034846</td>
       <td>1e-06</td>
-      <td>l2</td>
+      <td>l1</td>
       <td>TfidfVectorizer(analyzer='word', binary=False, decode_error='strict',\n                dtype=&lt;cl...</td>
       <td>(1, 2)</td>
-      <td>{'classifier__alpha': 1e-06, 'classifier__penalty': 'l2', 'vectorizer': TfidfVectorizer(analyzer...</td>
-      <td>0.856470</td>
-      <td>0.869696</td>
-      <td>0.864552</td>
-      <td>0.863571</td>
-      <td>0.005444</td>
+      <td>{'classifier__alpha': 1e-06, 'classifier__penalty': 'l1', 'vectorizer': TfidfVectorizer(analyzer...</td>
+      <td>0.865467</td>
+      <td>0.865409</td>
+      <td>0.858551</td>
+      <td>0.863143</td>
+      <td>0.003247</td>
       <td>1</td>
     </tr>
     <tr>
       <th>35</th>
-      <td>4.078279</td>
-      <td>0.361946</td>
-      <td>1.323163</td>
-      <td>0.421963</td>
+      <td>4.214837</td>
+      <td>0.127758</td>
+      <td>1.035478</td>
+      <td>0.075935</td>
       <td>1e-06</td>
       <td>None</td>
       <td>TfidfVectorizer(analyzer='word', binary=False, decode_error='strict',\n                dtype=&lt;cl...</td>
       <td>(1, 2)</td>
       <td>{'classifier__alpha': 1e-06, 'classifier__penalty': None, 'vectorizer': TfidfVectorizer(analyzer...</td>
-      <td>0.856898</td>
-      <td>0.868838</td>
-      <td>0.860266</td>
-      <td>0.862000</td>
-      <td>0.005027</td>
-      <td>2</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>4.427918</td>
-      <td>0.128942</td>
-      <td>1.301943</td>
-      <td>0.099332</td>
-      <td>0.0001</td>
-      <td>None</td>
-      <td>TfidfVectorizer(analyzer='word', binary=False, decode_error='strict',\n                dtype=&lt;cl...</td>
-      <td>(1, 2)</td>
-      <td>{'classifier__alpha': 0.0001, 'classifier__penalty': None, 'vectorizer': TfidfVectorizer(analyze...</td>
-      <td>0.856898</td>
-      <td>0.868838</td>
-      <td>0.860266</td>
-      <td>0.862000</td>
-      <td>0.005027</td>
+      <td>0.854756</td>
+      <td>0.865409</td>
+      <td>0.867553</td>
+      <td>0.862571</td>
+      <td>0.005596</td>
       <td>2</td>
     </tr>
     <tr>
       <th>23</th>
-      <td>4.726039</td>
-      <td>0.224878</td>
-      <td>1.180275</td>
-      <td>0.040809</td>
+      <td>4.351362</td>
+      <td>0.149013</td>
+      <td>1.171800</td>
+      <td>0.016341</td>
       <td>1e-05</td>
       <td>None</td>
       <td>TfidfVectorizer(analyzer='word', binary=False, decode_error='strict',\n                dtype=&lt;cl...</td>
       <td>(1, 2)</td>
       <td>{'classifier__alpha': 1e-05, 'classifier__penalty': None, 'vectorizer': TfidfVectorizer(analyzer...</td>
-      <td>0.856898</td>
-      <td>0.868838</td>
-      <td>0.860266</td>
-      <td>0.862000</td>
-      <td>0.005027</td>
+      <td>0.854756</td>
+      <td>0.865409</td>
+      <td>0.867553</td>
+      <td>0.862571</td>
+      <td>0.005596</td>
       <td>2</td>
     </tr>
     <tr>
-      <th>19</th>
-      <td>4.457039</td>
-      <td>0.130324</td>
-      <td>1.241798</td>
-      <td>0.056772</td>
-      <td>1e-05</td>
+      <th>11</th>
+      <td>4.470213</td>
+      <td>0.122893</td>
+      <td>1.143551</td>
+      <td>0.033470</td>
+      <td>0.0001</td>
+      <td>None</td>
+      <td>TfidfVectorizer(analyzer='word', binary=False, decode_error='strict',\n                dtype=&lt;cl...</td>
+      <td>(1, 2)</td>
+      <td>{'classifier__alpha': 0.0001, 'classifier__penalty': None, 'vectorizer': TfidfVectorizer(analyze...</td>
+      <td>0.854756</td>
+      <td>0.865409</td>
+      <td>0.867553</td>
+      <td>0.862571</td>
+      <td>0.005596</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>4.317683</td>
+      <td>0.093459</td>
+      <td>1.293560</td>
+      <td>0.112902</td>
+      <td>1e-06</td>
       <td>l2</td>
       <td>TfidfVectorizer(analyzer='word', binary=False, decode_error='strict',\n                dtype=&lt;cl...</td>
       <td>(1, 2)</td>
-      <td>{'classifier__alpha': 1e-05, 'classifier__penalty': 'l2', 'vectorizer': TfidfVectorizer(analyzer...</td>
-      <td>0.856470</td>
-      <td>0.867124</td>
-      <td>0.859837</td>
-      <td>0.861143</td>
-      <td>0.004447</td>
+      <td>{'classifier__alpha': 1e-06, 'classifier__penalty': 'l2', 'vectorizer': TfidfVectorizer(analyzer...</td>
+      <td>0.858183</td>
+      <td>0.858980</td>
+      <td>0.863266</td>
+      <td>0.860143</td>
+      <td>0.002232</td>
       <td>5</td>
     </tr>
   </tbody>
@@ -15173,7 +15062,7 @@ dtype: object</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[47]:</div>
+<div class="prompt input_prompt">In&nbsp;[43]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">score_random_predictions</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
@@ -15203,7 +15092,7 @@ dtype: object</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[48]:</div>
+<div class="prompt input_prompt">In&nbsp;[44]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">scoring</span> <span class="o">=</span> <span class="n">score_random_predictions</span><span class="p">(</span><span class="n">film_reviews_val</span><span class="p">[</span><span class="s1">&#39;review&#39;</span><span class="p">],</span> <span class="n">film_reviews_val</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
@@ -15220,13 +15109,13 @@ dtype: object</pre>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[48]:</div>
+    <div class="prompt output_prompt">Out[44]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>0.491</pre>
+<pre>0.5013333333333333</pre>
 </div>
 
 </div>
@@ -15245,7 +15134,7 @@ dtype: object</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[49]:</div>
+<div class="prompt input_prompt">In&nbsp;[45]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">model_conf_interval</span><span class="p">(</span><span class="n">scoring</span><span class="p">,</span> <span class="n">film_reviews_val</span><span class="p">[</span><span class="s1">&#39;review&#39;</span><span class="p">],</span> <span class="n">film_reviews_val</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
@@ -15261,13 +15150,13 @@ dtype: object</pre>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[49]:</div>
+    <div class="prompt output_prompt">Out[45]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>(0.47313390557488116, 0.5088891137021746)</pre>
+<pre>(0.48345119446171103, 0.519212061941688)</pre>
 </div>
 
 </div>
@@ -15286,7 +15175,7 @@ dtype: object</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[50]:</div>
+<div class="prompt input_prompt">In&nbsp;[46]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">model_diff_interval</span><span class="p">(</span><span class="n">gs</span><span class="p">,</span> <span class="n">scoring</span><span class="p">,</span> <span class="n">film_reviews_val</span><span class="p">[</span><span class="s1">&#39;review&#39;</span><span class="p">],</span> <span class="n">film_reviews_val</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">],</span> <span class="mf">0.99</span><span class="p">)</span>
@@ -15302,13 +15191,13 @@ dtype: object</pre>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[50]:</div>
+    <div class="prompt output_prompt">Out[46]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>(0.3568403614368606, 0.4131596385631394)</pre>
+<pre>(0.3451313111980338, 0.401535355468633)</pre>
 </div>
 
 </div>
@@ -15353,7 +15242,7 @@ Inoltre, una soglia minima di documenti permette di scartare termini contenenti 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[51]:</div>
+<div class="prompt input_prompt">In&nbsp;[47]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
@@ -15384,7 +15273,7 @@ Inoltre, una soglia minima di documenti permette di scartare termini contenenti 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[52]:</div>
+<div class="prompt input_prompt">In&nbsp;[48]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">stoplist</span> <span class="o">=</span> <span class="n">nltk</span><span class="o">.</span><span class="n">corpus</span><span class="o">.</span><span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s2">&quot;english&quot;</span><span class="p">)</span>
@@ -15404,7 +15293,7 @@ Inoltre, una soglia minima di documenti permette di scartare termini contenenti 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[53]:</div>
+<div class="prompt input_prompt">In&nbsp;[49]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">skf</span> <span class="o">=</span> <span class="n">StratifiedKFold</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
@@ -15420,14 +15309,14 @@ Inoltre, una soglia minima di documenti permette di scartare termini contenenti 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>L'accuratezza complessivamente aumenta attestandosi intorno al 90%:</p>
+<p>L'accuratezza complessivamente aumenta attestandosi intorno all'89%:</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[54]:</div>
+<div class="prompt input_prompt">In&nbsp;[50]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">gs_2</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">film_reviews_val</span><span class="p">[</span><span class="s1">&#39;review&#39;</span><span class="p">],</span> <span class="n">film_reviews_val</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
@@ -15443,13 +15332,13 @@ Inoltre, una soglia minima di documenti permette di scartare termini contenenti 
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[54]:</div>
+    <div class="prompt output_prompt">Out[50]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>0.8996666666666666</pre>
+<pre>0.8933333333333333</pre>
 </div>
 
 </div>
@@ -15472,7 +15361,7 @@ Inoltre, una soglia minima di documenti permette di scartare termini contenenti 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[55]:</div>
+<div class="prompt input_prompt">In&nbsp;[51]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">gs_2</span><span class="o">.</span><span class="n">best_params_</span>
@@ -15488,7 +15377,7 @@ Inoltre, una soglia minima di documenti permette di scartare termini contenenti 
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[55]:</div>
+    <div class="prompt output_prompt">Out[51]:</div>
 
 
 
@@ -15498,7 +15387,7 @@ Inoltre, una soglia minima di documenti permette di scartare termini contenenti 
  &#39;classifier__penalty&#39;: &#39;l2&#39;,
  &#39;vectorizer__min_df&#39;: 2,
  &#39;vectorizer__stop_words&#39;: None,
- &#39;vectorizer__tokenizer&#39;: None}</pre>
+ &#39;vectorizer__tokenizer&#39;: &lt;function nltk.tokenize.word_tokenize(text, language=&#39;english&#39;, preserve_line=False)&gt;}</pre>
 </div>
 
 </div>
@@ -15509,7 +15398,7 @@ Inoltre, una soglia minima di documenti permette di scartare termini contenenti 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[56]:</div>
+<div class="prompt input_prompt">In&nbsp;[52]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">gs_2</span><span class="o">.</span><span class="n">cv_results_</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;rank_test_score&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
@@ -15525,7 +15414,7 @@ Inoltre, una soglia minima di documenti permette di scartare termini contenenti 
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[56]:</div>
+    <div class="prompt output_prompt">Out[52]:</div>
 
 
 
@@ -15568,98 +15457,98 @@ Inoltre, una soglia minima di documenti permette di scartare termini contenenti 
   </thead>
   <tbody>
     <tr>
-      <th>28</th>
-      <td>7.234866</td>
-      <td>0.848706</td>
-      <td>1.208068</td>
-      <td>0.103894</td>
+      <th>29</th>
+      <td>16.146197</td>
+      <td>0.582179</td>
+      <td>5.336672</td>
+      <td>0.090740</td>
       <td>10</td>
       <td>l2</td>
       <td>2</td>
       <td>None</td>
-      <td>None</td>
+      <td>&lt;function word_tokenize at 0x000002320B3B2828&gt;</td>
       <td>{'classifier__C': 10, 'classifier__penalty': 'l2', 'vectorizer__min_df': 2, 'vectorizer__stop_wo...</td>
-      <td>0.883462</td>
-      <td>0.889413</td>
-      <td>0.891985</td>
-      <td>0.888286</td>
-      <td>0.003570</td>
+      <td>0.888603</td>
+      <td>0.892413</td>
+      <td>0.886841</td>
+      <td>0.889286</td>
+      <td>0.002325</td>
       <td>1</td>
     </tr>
     <tr>
-      <th>29</th>
-      <td>15.630468</td>
-      <td>0.255474</td>
-      <td>5.383122</td>
-      <td>0.087212</td>
+      <th>28</th>
+      <td>7.481087</td>
+      <td>0.784788</td>
+      <td>1.317826</td>
+      <td>0.093805</td>
       <td>10</td>
       <td>l2</td>
       <td>2</td>
       <td>None</td>
-      <td>&lt;function word_tokenize at 0x0000020FD99E2828&gt;</td>
+      <td>None</td>
       <td>{'classifier__C': 10, 'classifier__penalty': 'l2', 'vectorizer__min_df': 2, 'vectorizer__stop_wo...</td>
-      <td>0.881748</td>
-      <td>0.890699</td>
+      <td>0.883033</td>
       <td>0.888556</td>
-      <td>0.887000</td>
-      <td>0.003816</td>
+      <td>0.894556</td>
+      <td>0.888714</td>
+      <td>0.004706</td>
       <td>2</td>
-    </tr>
-    <tr>
-      <th>24</th>
-      <td>9.264500</td>
-      <td>1.107429</td>
-      <td>1.321911</td>
-      <td>0.028061</td>
-      <td>10</td>
-      <td>l2</td>
-      <td>0</td>
-      <td>None</td>
-      <td>None</td>
-      <td>{'classifier__C': 10, 'classifier__penalty': 'l2', 'vectorizer__min_df': 0, 'vectorizer__stop_wo...</td>
-      <td>0.878749</td>
-      <td>0.887270</td>
-      <td>0.890270</td>
-      <td>0.885429</td>
-      <td>0.004880</td>
-      <td>3</td>
     </tr>
     <tr>
       <th>25</th>
-      <td>20.139074</td>
-      <td>0.436714</td>
-      <td>6.761527</td>
-      <td>0.325912</td>
+      <td>20.310285</td>
+      <td>0.527174</td>
+      <td>6.989584</td>
+      <td>0.185290</td>
       <td>10</td>
       <td>l2</td>
       <td>0</td>
       <td>None</td>
-      <td>&lt;function word_tokenize at 0x0000020FD99E2828&gt;</td>
+      <td>&lt;function word_tokenize at 0x000002320B3B2828&gt;</td>
       <td>{'classifier__C': 10, 'classifier__penalty': 'l2', 'vectorizer__min_df': 0, 'vectorizer__stop_wo...</td>
-      <td>0.877892</td>
-      <td>0.890699</td>
-      <td>0.883841</td>
-      <td>0.884143</td>
-      <td>0.005233</td>
+      <td>0.887746</td>
+      <td>0.892842</td>
+      <td>0.882126</td>
+      <td>0.887571</td>
+      <td>0.004376</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>9.974491</td>
+      <td>1.693948</td>
+      <td>1.388840</td>
+      <td>0.030278</td>
+      <td>10</td>
+      <td>l2</td>
+      <td>0</td>
+      <td>None</td>
+      <td>None</td>
+      <td>{'classifier__C': 10, 'classifier__penalty': 'l2', 'vectorizer__min_df': 0, 'vectorizer__stop_wo...</td>
+      <td>0.877464</td>
+      <td>0.890270</td>
+      <td>0.887270</td>
+      <td>0.885000</td>
+      <td>0.005469</td>
       <td>4</td>
     </tr>
     <tr>
       <th>31</th>
-      <td>13.514500</td>
-      <td>0.607063</td>
-      <td>4.598773</td>
-      <td>0.102670</td>
+      <td>13.276964</td>
+      <td>0.112935</td>
+      <td>4.623551</td>
+      <td>0.158741</td>
       <td>10</td>
       <td>l2</td>
       <td>2</td>
       <td>[i, me, my, myself, we, our, ours, ourselves, you, you're, you've, you'll, you'd, your, yours, y...</td>
-      <td>&lt;function word_tokenize at 0x0000020FD99E2828&gt;</td>
+      <td>&lt;function word_tokenize at 0x000002320B3B2828&gt;</td>
       <td>{'classifier__C': 10, 'classifier__penalty': 'l2', 'vectorizer__min_df': 2, 'vectorizer__stop_wo...</td>
       <td>0.874036</td>
-      <td>0.884269</td>
+      <td>0.885984</td>
       <td>0.886412</td>
-      <td>0.881571</td>
-      <td>0.005401</td>
+      <td>0.882143</td>
+      <td>0.005736</td>
       <td>5</td>
     </tr>
   </tbody>
@@ -15683,7 +15572,7 @@ Inoltre, una soglia minima di documenti permette di scartare termini contenenti 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[57]:</div>
+<div class="prompt input_prompt">In&nbsp;[53]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">model_1</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
@@ -15700,7 +15589,7 @@ Inoltre, una soglia minima di documenti permette di scartare termini contenenti 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[58]:</div>
+<div class="prompt input_prompt">In&nbsp;[54]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">model_2</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
@@ -15717,7 +15606,7 @@ Inoltre, una soglia minima di documenti permette di scartare termini contenenti 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[59]:</div>
+<div class="prompt input_prompt">In&nbsp;[55]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">model_1</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">film_reviews_val</span><span class="p">[</span><span class="s1">&#39;review&#39;</span><span class="p">],</span> <span class="n">film_reviews_val</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
@@ -15733,13 +15622,13 @@ Inoltre, una soglia minima di documenti permette di scartare termini contenenti 
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[59]:</div>
+    <div class="prompt output_prompt">Out[55]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>0.8783333333333333</pre>
+<pre>0.8746666666666667</pre>
 </div>
 
 </div>
@@ -15750,7 +15639,7 @@ Inoltre, una soglia minima di documenti permette di scartare termini contenenti 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[60]:</div>
+<div class="prompt input_prompt">In&nbsp;[56]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">model_2</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">film_reviews_val</span><span class="p">[</span><span class="s1">&#39;review&#39;</span><span class="p">],</span> <span class="n">film_reviews_val</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
@@ -15766,13 +15655,13 @@ Inoltre, una soglia minima di documenti permette di scartare termini contenenti 
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[60]:</div>
+    <div class="prompt output_prompt">Out[56]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>0.8996666666666666</pre>
+<pre>0.8913333333333333</pre>
 </div>
 
 </div>
@@ -15791,7 +15680,7 @@ Inoltre, una soglia minima di documenti permette di scartare termini contenenti 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[61]:</div>
+<div class="prompt input_prompt">In&nbsp;[57]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">model_conf_interval</span><span class="p">(</span><span class="n">gs</span><span class="p">,</span> <span class="n">film_reviews_val</span><span class="p">[</span><span class="s1">&#39;review&#39;</span><span class="p">],</span> <span class="n">film_reviews_val</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
@@ -15807,13 +15696,13 @@ Inoltre, una soglia minima di documenti permette di scartare termini contenenti 
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[61]:</div>
+    <div class="prompt output_prompt">Out[57]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>(0.8637231841656314, 0.8873151215929234)</pre>
+<pre>(0.8623374940250748, 0.886037555330081)</pre>
 </div>
 
 </div>
@@ -15832,7 +15721,7 @@ Inoltre, una soglia minima di documenti permette di scartare termini contenenti 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[62]:</div>
+<div class="prompt input_prompt">In&nbsp;[58]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">model_conf_interval</span><span class="p">(</span><span class="n">gs_2</span><span class="p">,</span> <span class="n">film_reviews_val</span><span class="p">[</span><span class="s1">&#39;review&#39;</span><span class="p">],</span> <span class="n">film_reviews_val</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
@@ -15848,13 +15737,13 @@ Inoltre, una soglia minima di documenti permette di scartare termini contenenti 
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[62]:</div>
+    <div class="prompt output_prompt">Out[58]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>(0.8883992294487809, 0.9099118774701086)</pre>
+<pre>(0.8817798400091313, 0.9038807989936123)</pre>
 </div>
 
 </div>
@@ -15873,7 +15762,7 @@ Inoltre, una soglia minima di documenti permette di scartare termini contenenti 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[63]:</div>
+<div class="prompt input_prompt">In&nbsp;[59]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">model_diff_interval</span><span class="p">(</span><span class="n">gs</span><span class="p">,</span> <span class="n">gs_2</span><span class="p">,</span> <span class="n">film_reviews_val</span><span class="p">[</span><span class="s1">&#39;review&#39;</span><span class="p">],</span> <span class="n">film_reviews_val</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
@@ -15889,13 +15778,13 @@ Inoltre, una soglia minima di documenti permette di scartare termini contenenti 
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[63]:</div>
+    <div class="prompt output_prompt">Out[59]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>(0.007708075678407405, 0.03962525765492582)</pre>
+<pre>(0.002468232183398377, 0.03486510114993484)</pre>
 </div>
 
 </div>
@@ -15938,7 +15827,7 @@ Inoltre, una soglia minima di documenti permette di scartare termini contenenti 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[64]:</div>
+<div class="prompt input_prompt">In&nbsp;[60]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">cm</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">film_reviews_val</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">],</span> <span class="n">model_2</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">film_reviews_val</span><span class="p">[</span><span class="s1">&#39;review&#39;</span><span class="p">]))</span>
@@ -15955,7 +15844,7 @@ Inoltre, una soglia minima di documenti permette di scartare termini contenenti 
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[64]:</div>
+    <div class="prompt output_prompt">Out[60]:</div>
 
 
 
@@ -15985,13 +15874,13 @@ Inoltre, una soglia minima di documenti permette di scartare termini contenenti 
   <tbody>
     <tr>
       <th>neg</th>
-      <td>1340</td>
-      <td>173</td>
+      <td>1320</td>
+      <td>193</td>
     </tr>
     <tr>
       <th>pos</th>
-      <td>128</td>
-      <td>1359</td>
+      <td>133</td>
+      <td>1354</td>
     </tr>
   </tbody>
 </table>
@@ -16014,7 +15903,7 @@ Inoltre, una soglia minima di documenti permette di scartare termini contenenti 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[65]:</div>
+<div class="prompt input_prompt">In&nbsp;[61]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Precision per classe </span><span class="se">\&#39;</span><span class="s1">pos</span><span class="se">\&#39;</span><span class="s1">: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">precision_score</span><span class="p">(</span><span class="n">film_reviews_val</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">],</span> <span class="n">model_2</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">film_reviews_val</span><span class="p">[</span><span class="s1">&#39;review&#39;</span><span class="p">]),</span> <span class="n">pos_label</span><span class="o">=</span><span class="s2">&quot;pos&quot;</span><span class="p">)))</span>
@@ -16037,10 +15926,10 @@ Inoltre, una soglia minima di documenti permette di scartare termini contenenti 
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Precision per classe &#39;pos&#39;: 0.8870757180156658
-Precision per classe &#39;neg&#39;: 0.9128065395095368
-Recall per classe &#39;pos&#39;: 0.9139206455951581
-Recall per classe &#39;neg&#39;: 0.8856576338400529
+<pre>Precision per classe &#39;pos&#39;: 0.8752424046541694
+Precision per classe &#39;neg&#39;: 0.9084652443220922
+Recall per classe &#39;pos&#39;: 0.9105581708137189
+Recall per classe &#39;neg&#39;: 0.8724388631857237
 </pre>
 </div>
 </div>
@@ -16051,7 +15940,7 @@ Recall per classe &#39;neg&#39;: 0.8856576338400529
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[66]:</div>
+<div class="prompt input_prompt">In&nbsp;[62]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;F1 score: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">f1_score</span><span class="p">(</span><span class="n">film_reviews_val</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">],</span> <span class="n">model_2</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">film_reviews_val</span><span class="p">[</span><span class="s1">&#39;review&#39;</span><span class="p">]),</span> <span class="n">average</span><span class="o">=</span><span class="kc">None</span><span class="p">)))</span>
@@ -16071,7 +15960,7 @@ Recall per classe &#39;neg&#39;: 0.8856576338400529
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>F1 score: [0.89902717 0.90029811]
+<pre>F1 score: [0.89008766 0.89255109]
 </pre>
 </div>
 </div>
@@ -16082,7 +15971,7 @@ Recall per classe &#39;neg&#39;: 0.8856576338400529
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[67]:</div>
+<div class="prompt input_prompt">In&nbsp;[63]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">coefs_2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">model_2</span><span class="o">.</span><span class="n">named_steps</span><span class="p">[</span><span class="s1">&#39;classifier&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">coef_</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="n">model_2</span><span class="o">.</span><span class="n">named_steps</span><span class="p">[</span><span class="s1">&#39;vectorizer&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get_feature_names</span><span class="p">())</span>
@@ -16095,7 +15984,7 @@ Recall per classe &#39;neg&#39;: 0.8856576338400529
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[68]:</div>
+<div class="prompt input_prompt">In&nbsp;[64]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">coefs_2</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -16128,7 +16017,7 @@ Recall per classe &#39;neg&#39;: 0.8856576338400529
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[69]:</div>
+<div class="prompt input_prompt">In&nbsp;[65]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">coefs_2</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
@@ -16144,22 +16033,22 @@ Recall per classe &#39;neg&#39;: 0.8856576338400529
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[69]:</div>
+    <div class="prompt output_prompt">Out[65]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>great        10.315396
-excellent     7.226280
-well          6.325350
-wonderful     5.907176
-best          5.816539
-the best      5.739493
-and           5.438185
-it            4.885631
-brilliant     4.812058
-amazing       4.754324
+<pre>great        10.252743
+excellent     7.242254
+wonderful     6.546292
+best          6.180387
+well          5.434764
+the best      5.391067
+very          5.266911
+brilliant     5.233232
+and           5.165333
+it            4.823895
 dtype: float64</pre>
 </div>
 
@@ -16179,7 +16068,7 @@ dtype: float64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[70]:</div>
+<div class="prompt input_prompt">In&nbsp;[66]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">coefs_2</span><span class="o">.</span><span class="n">tail</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
@@ -16195,22 +16084,22 @@ dtype: float64</pre>
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[70]:</div>
+    <div class="prompt output_prompt">Out[66]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>no           -6.060528
-stupid       -6.239139
-nothing      -6.719048
-terrible     -7.067089
-boring       -7.287966
-the worst    -7.344203
-awful        -7.700127
-poor         -8.087140
-worst        -9.156375
-bad         -11.266667
+<pre>no           -5.579109
+nothing      -6.081574
+stupid       -6.085443
+boring       -7.413290
+terrible     -7.432151
+awful        -7.482629
+the worst    -7.574550
+poor         -7.850457
+worst        -9.865570
+bad         -11.061151
 dtype: float64</pre>
 </div>
 
@@ -16274,7 +16163,7 @@ documento, oltre ad individuare la relazione tra i termini che lo compongono.</p
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[71]:</div>
+<div class="prompt input_prompt">In&nbsp;[67]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">LSA_model</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">([</span>
@@ -16300,7 +16189,7 @@ documento, oltre ad individuare la relazione tra i termini che lo compongono.</p
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[72]:</div>
+<div class="prompt input_prompt">In&nbsp;[68]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">LSA_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">film_reviews_train</span><span class="p">[</span><span class="s1">&#39;review&#39;</span><span class="p">],</span> <span class="n">film_reviews_train</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]);</span>
@@ -16317,13 +16206,13 @@ documento, oltre ad individuare la relazione tra i termini che lo compongono.</p
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[72]:</div>
+    <div class="prompt output_prompt">Out[68]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>0.887</pre>
+<pre>0.882</pre>
 </div>
 
 </div>
@@ -16342,7 +16231,7 @@ documento, oltre ad individuare la relazione tra i termini che lo compongono.</p
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[73]:</div>
+<div class="prompt input_prompt">In&nbsp;[69]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">model_conf_interval</span><span class="p">(</span><span class="n">LSA_model</span><span class="p">,</span> <span class="n">film_reviews_val</span><span class="p">[</span><span class="s1">&#39;review&#39;</span><span class="p">],</span> <span class="n">film_reviews_val</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
@@ -16358,13 +16247,13 @@ documento, oltre ad individuare la relazione tra i termini che lo compongono.</p
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[73]:</div>
+    <div class="prompt output_prompt">Out[69]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>(0.8751726000741885, 0.8978375710124092)</pre>
+<pre>(0.869964354086752, 0.8930586054870989)</pre>
 </div>
 
 </div>
@@ -16383,7 +16272,7 @@ documento, oltre ad individuare la relazione tra i termini che lo compongono.</p
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[74]:</div>
+<div class="prompt input_prompt">In&nbsp;[70]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">model_diff_interval</span><span class="p">(</span><span class="n">LSA_model</span><span class="p">,</span> <span class="n">model_2</span><span class="p">,</span> <span class="n">film_reviews_val</span><span class="p">[</span><span class="s1">&#39;review&#39;</span><span class="p">],</span> <span class="n">film_reviews_val</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
@@ -16399,13 +16288,13 @@ documento, oltre ad individuare la relazione tra i termini che lo compongono.</p
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[74]:</div>
+    <div class="prompt output_prompt">Out[70]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>(-0.002951576033346715, 0.028284909366679923)</pre>
+<pre>(-0.006707038029105793, 0.025373704695772402)</pre>
 </div>
 
 </div>
@@ -16432,7 +16321,7 @@ documento, oltre ad individuare la relazione tra i termini che lo compongono.</p
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[75]:</div>
+<div class="prompt input_prompt">In&nbsp;[71]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">first_matrix</span> <span class="o">=</span> <span class="n">LSA_model</span><span class="o">.</span><span class="n">named_steps</span><span class="p">[</span><span class="s1">&#39;vectorizer&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">film_reviews_train</span><span class="p">[</span><span class="s1">&#39;review&#39;</span><span class="p">])</span>
@@ -16449,14 +16338,14 @@ documento, oltre ad individuare la relazione tra i termini che lo compongono.</p
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[75]:</div>
+    <div class="prompt output_prompt">Out[71]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;7000x153782 sparse matrix of type &#39;&lt;class &#39;numpy.float64&#39;&gt;&#39;
-	with 1935478 stored elements in Compressed Sparse Row format&gt;</pre>
+<pre>&lt;7000x154401 sparse matrix of type &#39;&lt;class &#39;numpy.float64&#39;&gt;&#39;
+	with 1942286 stored elements in Compressed Sparse Row format&gt;</pre>
 </div>
 
 </div>
@@ -16475,7 +16364,7 @@ documento, oltre ad individuare la relazione tra i termini che lo compongono.</p
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[76]:</div>
+<div class="prompt input_prompt">In&nbsp;[72]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">LSA_model</span><span class="o">.</span><span class="n">named_steps</span><span class="p">[</span><span class="s1">&#39;svd_truncated&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">first_matrix</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span>
@@ -16491,7 +16380,7 @@ documento, oltre ad individuare la relazione tra i termini che lo compongono.</p
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[76]:</div>
+    <div class="prompt output_prompt">Out[72]:</div>
 
 
 
@@ -16508,7 +16397,7 @@ documento, oltre ad individuare la relazione tra i termini che lo compongono.</p
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[77]:</div>
+<div class="prompt input_prompt">In&nbsp;[73]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">elapsed</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t</span>
@@ -16525,13 +16414,13 @@ documento, oltre ad individuare la relazione tra i termini che lo compongono.</p
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[77]:</div>
+    <div class="prompt output_prompt">Out[73]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>521.3216955661774</pre>
+<pre>439.60274481773376</pre>
 </div>
 
 </div>
